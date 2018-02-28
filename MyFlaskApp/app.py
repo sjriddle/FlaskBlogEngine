@@ -18,7 +18,6 @@ mysql = MySQL(app)
 
 Articles = Articles()
 
-
 @app.route('/')
 def index():
     return render_template('home.html')
@@ -82,7 +81,6 @@ def login():
 def article(id):
     return render_template('article.html', id=id)
 
-
 class RegisterForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=50)])
     username = StringField('Username', [validators.Length(min=4, max=25)])
@@ -117,7 +115,6 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
