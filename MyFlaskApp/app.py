@@ -15,7 +15,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # init MySQL
 mysql = MySQL(app)
-
 Articles = Articles()
 
 @app.route('/')
@@ -59,7 +58,6 @@ def login():
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
-                # Passed
                 session['logged_in'] = True
                 session['username'] = username
 
@@ -68,7 +66,6 @@ def login():
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
-            # Close connection
             cur.close()
         else:
             error = 'Username not found'
@@ -101,14 +98,10 @@ def register():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        # Create Cursor
+        # Create Cursor, Commit to DB, Close Connection
         cur = mysql.connect().cursor()
         cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
-
-        # Commit to DB
         cur.connection.commit()
-
-        # Close connection
         cur.close()
 
         flash('You are now registered and can log in', 'success')
