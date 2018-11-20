@@ -98,10 +98,8 @@ def register():
         cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
         cur.connection.commit()
         cur.close()
-
         flash('You are now registered and can log in', 'success')
         return redirect(url_for('login'))
-    
     return render_template('register.html', form=form)
 
 
