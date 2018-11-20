@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # Config MySQL
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'sriddle'
+app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'myflaskapp'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -111,4 +111,5 @@ def register():
 
 
 if __name__ == '__main__':
+    app.secret_key='secret123'
     app.run(debug=True)
