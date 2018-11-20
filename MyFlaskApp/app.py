@@ -6,14 +6,12 @@ from passlib.hash import sha256_crypt
 
 app = Flask(__name__)
 
-# Config MySQL
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'myflaskapp'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-# init MySQL
 mysql = MySQL(app)
 Articles = Articles()
 
@@ -50,7 +48,6 @@ def login():
 
         # Get user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
-
         if result > 0:
             # Get stored hash
             data = cur.fetchone()
@@ -60,7 +57,6 @@ def login():
             if sha256_crypt.verify(password_candidate, password):
                 session['logged_in'] = True
                 session['username'] = username
-
                 flash('You are now logged in', 'success')
                 return redirect(url_for('dashboard'))
             else:
@@ -70,7 +66,6 @@ def login():
         else:
             error = 'Username not found'
             return render_template('login.html', error=error)
-
     return render_template('login.html')
 
 
