@@ -49,11 +49,8 @@ def login():
         # Get user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
         if result > 0:
-            # Get stored hash
             data = cur.fetchone()
             password = data['password']
-
-            # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
                 session['logged_in'] = True
                 session['username'] = username
@@ -72,6 +69,7 @@ def login():
 @app.route('/article/<string:id>/')
 def article(id):
     return render_template('article.html', id=id)
+
 
 class RegisterForm(Form):
     name = StringField('Name', [validators.Length(min=1, max=50)])
