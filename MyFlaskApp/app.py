@@ -47,7 +47,6 @@ def login():
 
         # Get user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
-
         if result > 0:
             # Get stored hash
             data = cur.fetchone()
@@ -69,7 +68,6 @@ def login():
         else:
             error = 'Username not found'
             return render_template('login.html', error=error)
-
     return render_template('login.html')
 
 
