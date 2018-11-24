@@ -43,7 +43,7 @@ def login():
         password_candidate = request.form['password']
 
         # Create cursor
-        cur = mysql.connection.cursor()
+        cur = mysql.connect().cursor()
 
         # Get user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
@@ -98,7 +98,7 @@ def register():
 
         # Create Cursor, Commit to DB, Close Connection
         cur = mysql.connect().cursor()
-        cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
+        cur.execute("INSERT INTO myflaskapp.users(name, username, password, email) VALUES(%s, %s, %s, %s)", (name, username, password, email))
         cur.connection.commit()
         cur.close()
 
@@ -107,6 +107,6 @@ def register():
     return render_template('register.html', form=form)
 
 
-if __name__ == '__main__':
-    app.secret_key='secret123'
-    app.run(debug=True)
+#if __name__ == '__main__':
+app.secret_key = 'secret123'
+app.run(debug=True)
