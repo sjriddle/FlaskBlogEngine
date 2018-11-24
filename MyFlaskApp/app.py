@@ -35,7 +35,6 @@ def articles():
     return render_template('articles.html', articles = Articles)
 
 
-@app.route('/login')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -44,25 +43,33 @@ def login():
         password_candidate = request.form['password']
 
         # Create cursor
-        cur = mysql.connect().cursor()
+        cur = mysql.connection.cursor()
 
         # Get user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+
         if result > 0:
+            # Get stored hash
             data = cur.fetchone()
             password = data['password']
+
+            # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
+                # Passed
                 session['logged_in'] = True
                 session['username'] = username
+
                 flash('You are now logged in', 'success')
                 return redirect(url_for('dashboard'))
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
+            # Close connection
             cur.close()
         else:
             error = 'Username not found'
             return render_template('login.html', error=error)
+
     return render_template('login.html')
 
 
@@ -96,6 +103,7 @@ def register():
         cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
         cur.connection.commit()
         cur.close()
+
         flash('You are now registered and can log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
