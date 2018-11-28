@@ -1,11 +1,10 @@
 from flask import Flask, render_template, flash, request, redirect, url_for, session, logging
-from data import Articles
 from flaskext.mysql import MySQL
+from data import Articles
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 
 app = Flask(__name__)
-
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
@@ -41,29 +40,23 @@ def login():
         # Get Form Fields
         username = request.form['username']
         password_candidate = request.form['password']
-
-        # Create cursor
         cur = mysql.connect().cursor()
 
         # Get user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
         if result > 0:
-            # Get stored hash
             data = cur.fetchone()
             password = data['password']
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
-                # Passed
                 session['logged_in'] = True
                 session['username'] = username
-
                 flash('You are now logged in', 'success')
                 return redirect(url_for('dashboard'))
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
-            # Close connection
             cur.close()
         else:
             error = 'Username not found'
@@ -101,12 +94,11 @@ def register():
         cur.execute("INSERT INTO myflaskapp.users(name, username, password, email) VALUES(%s, %s, %s, %s)", (name, username, password, email))
         cur.connection.commit()
         cur.close()
-
         flash('You are now registered and can log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
 
-#if __name__ == '__main__':
-app.secret_key = 'secret123'
-app.run(debug=True)
+if __name__ == '__main__':
+    app.secret_key = 'secret123'
+    app.run(debug=True)
