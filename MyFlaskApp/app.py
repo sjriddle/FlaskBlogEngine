@@ -36,8 +36,8 @@ def articles():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Get form fields in POST method
     if request.method == 'POST':
-        # Get Form Fields
         username = request.form['username']
         password_candidate = request.form['password']
         cur = mysql.connect().cursor()
