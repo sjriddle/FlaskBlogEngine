@@ -42,7 +42,7 @@ def login():
         password_candidate = request.form['password']
         cur = mysql.connect().cursor()
 
-        # Get user by username
+        # Query user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
         if result > 0:
             data = cur.fetchone()
