@@ -36,19 +36,14 @@ def articles():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Get form fields in POST method
     if request.method == 'POST':
         username = request.form['username']
         password_candidate = request.form['password']
         cur = mysql.connect().cursor()
-
-        # Query user by username
         result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
         if result > 0:
             data = cur.fetchone()
             password = data['password']
-
-            # Compare the passwords that are returned
             if sha256_crypt.verify(password_candidate, password):
                 session['logged_in'] = True
                 session['username'] = username
@@ -89,7 +84,6 @@ def register():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        # Create Cursor, Commit to DB, Close Connection
         cur = mysql.connect().cursor()
         cur.execute("INSERT INTO myflaskapp.users(name, username, password, email) VALUES(%s, %s, %s, %s)", (name, username, password, email))
         cur.connection.commit()
@@ -97,7 +91,6 @@ def register():
         
         flash('You are now registered and can log in.', 'success')
         return redirect(url_for('login'))
-    
     return render_template('register.html', form=form)
 
 
