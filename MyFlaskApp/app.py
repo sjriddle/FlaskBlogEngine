@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, request, redirect, url_for, session, logging
 from flaskext.mysql import MySQL
-from data import Articles
+#from data import Articles
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 
@@ -18,21 +18,17 @@ Articles = Articles()
 def index():
     return render_template('home.html')
 
-
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
 
-
 @app.route('/articles')
 def articles():
     return render_template('articles.html', articles = Articles)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -57,7 +53,6 @@ def login():
             error = 'Username not found'
             return render_template('login.html', error=error)
     return render_template('login.html')
-
 
 @app.route('/article/<string:id>/')
 def article(id):
@@ -92,7 +87,6 @@ def register():
         flash('You are now registered and can log in.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
-
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'
