@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, request, redirect, url_for, session, logging
 from flaskext.mysql import MySQL
-#from data import Articles
+from data import Articles
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 
@@ -69,7 +69,6 @@ class RegisterForm(Form):
     ])
     confirm = PasswordField('Confirm Password')
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -88,6 +87,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+
 if __name__ == '__main__':
-    app.secret_key = 'secret123'
+    app.secret_key = 'secret'
     app.run(debug=True)
