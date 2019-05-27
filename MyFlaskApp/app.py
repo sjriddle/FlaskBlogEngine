@@ -36,7 +36,7 @@ def login():
         username = request.form['username']
         password_candidate = request.form['password']
         cur = mysql.connect().cursor()
-        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+        result = cur.execute('SELECT * FROM users WHERE username = %s', [username])
         if result > 0:
             data = cur.fetchone()
             password = data['password']
@@ -79,7 +79,7 @@ def register():
         password = sha256_crypt.encrypt(str(form.password.data))
 
         cur = mysql.connect().cursor()
-        cur.execute("INSERT INTO myflaskapp.users(name, username, password, email) VALUES(%s, %s, %s, %s)", (name, username, password, email))
+        cur.execute('INSERT INTO myflaskapp.users(name, username, password, email) VALUES(%s, %s, %s, %s)', (name, username, password, email))
         cur.connection.commit()
         cur.close()
         
